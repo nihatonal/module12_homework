@@ -1,70 +1,61 @@
-function Machine(name) {
+function Machine(name, power) {
+	this.name = name;
+  this.power = power;
+}
 
-    this.name = name;
-  
-    let turn = false;
-  
-    this.turnOn = function() {
-      turn = true;
-    };
-  
-    this.turnOff = function() {
-      turn = false;
-    };
-  
-  }
-  
-  Machine.prototype.getPower = function(power) {
-    console.log(`Power is ${power} watt`);
-  }
-  
-  function CoffeeMachine() {
-  
-    let waterAmount = 0;
-  
-    this.setWaterAmount = function(amount) {
-      waterAmount = amount;
-    };
-  
-  }
-  
-  
-  function Fridge(power) {
-   
-    Machine.apply(this, arguments);
-  
-    let food = []; 
-  
-    this.addFood = function() {
-      if (!this.turnOn) {
-        throw new Error("Холодильник выключен");
+Machine.prototype.Watt = function() {
+	console.log(`${this.name} using ${this.power} watts per hour`);
+}
+
+function PowerUsing(name, power, hour) {
+	Machine.call(this, name, power);
+	this.hour = hour;
+}
+PowerUsing.prototype = Object.create(Machine.prototype);
+PowerUsing.prototype.constructor = PowerUsing;
+PowerUsing.prototype.calcPower = function(){
+	let result = this.hour * this.power;
+  	console.log(`A ${this.power} ${this.name} used ${this.hour} hours per day is using totally ${result} watts`);
+}
+
+
+function CoffeeMachine(name, power, hour,capsule) {
+	PowerUsing.call(this, name, power, hour);
+  this.capsule = capsule;
+}
+CoffeeMachine.prototype = Object.create(PowerUsing.prototype);
+CoffeeMachine.prototype.constructor = CoffeeMachine;
+CoffeeMachine.prototype.makeCoffee = function() {
+ 
+ if (this.capsule == 0) {
+        return `Opps!! You forgot the coffee capsule`
+      } else {
+        return `Your coffee is getting ready`
       }
-      if (food.length + arguments.length > this._power / 100) {
-        throw new Error("Нельзя добавить, не хватает мощности");
+}
+
+function Iron(name, power, hour,wateramount) {
+	PowerUsing.call(this, name, power, hour);
+  this.wateramount = wateramount;
+}
+Iron.prototype = Object.create(PowerUsing.prototype);
+Iron.prototype.constructor = Iron;
+Iron.prototype.iron = function() {
+ 
+ if (this.wateramount < 10) {
+        return `Low water level. Please, add water!`
+      } else {
+        return `Good Luck, I'm ready to serve you.`
       }
-      for (var i = 0; i < arguments.length; i++) {
-        food.push(arguments[i]);
-         console.log(food)
-      }
-     
-    };
-  
-    this.getFood = function() {
-      return food.slice();
-    };
-  
-  }
-  
-  let fridge = new Fridge(500);
-  fridge.turnOn();
-  fridge.addFood("apple", "cake", "cheese");
-  
-  
-  const coffeeMachine = new Machine("coffeeMachine");
-  coffeeMachine.getPower(10000);
+}
 
 
+const MyCoffeeMachine = new CoffeeMachine('Coffee Maker', 1200, 3, 0);
+MyCoffeeMachine.Watt();
+MyCoffeeMachine.calcPower();
+console.log(MyCoffeeMachine.makeCoffee());
 
-  // I have a big problem about this topic. I just tried to understand what this is. 3 times I watched the module. 
-  // But I could not understand all of them.
-  
+const MyIron = new Iron('Iron', 1600, 2, 10);
+MyIron.Watt();
+MyIron.calcPower();
+console.log(MyIron.iron());
