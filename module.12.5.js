@@ -1,49 +1,55 @@
 class Machine {
-    constructor(power, hour) {
-      this.power = power;
-      this.hour = hour;
-    }
-    getWatt() {
-      return this.power * this.hour +` watt`;
-    }
-  
+  constructor(name, power) {
+    this.name = name;
+    this.power = power;
   }
-  
-  class CoffeeMachine extends Machine {
-    constructor(wateramount, power, hour) {
-      super(power, hour);
-      this.wateramount = wateramount;
-    }
-  
-    getCoffee() {
-      if (this.wateramount < 10) {
-        return `Low water level. Please, add water!`
-      } else {
-        return `Your coffee is getting ready`
-      }
-    }
+
+  watt() {
+    console.log(`${this.name} using ${this.power} watts per hour`);
   }
-  
-  class iron extends Machine {
-    constructor(temperature, power, hour) {
-      super(power, hour);
-      this.temperature = temperature;
-    }
-  
-    addWater() {
-      if (this.temperature > 250) {
-        return `Temperature is too high! Add water, please`
-      } else {
-        return `You can iron your clothes. Good Luck!`
-      }
+}
+
+class PowerUsing extends Machine {
+  constructor(name, power, hour) {
+    super(name, power);
+    this.hour = hour;
+  }
+
+  calcPower() {
+    let result = this.hour * this.power;
+    console.log(`A ${this.power} ${this.name} used ${this.hour} hours per day is using totally ${result} watts`);
+  }
+}
+
+class CoffeeMachine extends PowerUsing {
+
+  makeCoffee(capsule) {
+
+    if (capsule == 0) {
+      return `Opps!! You forgot the coffee capsule`
+    } else {
+      return `Your coffee is getting ready`
     }
   }
-  
-  const myCoffeeMachine = new CoffeeMachine(40, 900, 3);
-  const myIron = new iron(270, 1100, 3);
-  console.log(myCoffeeMachine.getCoffee());
-  console.log(myCoffeeMachine.getWatt());
-  console.log(myIron.addWater());
-  console.log(myIron.getWatt());
-  
-  
+}
+
+class Iron extends PowerUsing {
+
+  iron(wateramount) {
+    if (wateramount < 10) {
+      return `Low water level. Please, add water!`
+    } else {
+      return `Hello! I'm ready to serve you.`
+    }
+  }
+}
+
+const MyCoffeeMachine = new CoffeeMachine('Coffee Maker', 1200, 3);
+MyCoffeeMachine.watt();
+MyCoffeeMachine.calcPower();
+console.log(MyCoffeeMachine.makeCoffee(0));
+
+const MyIron = new Iron('Iron', 1600, 2);
+MyIron.watt();
+MyIron.calcPower();
+console.log(MyIron.iron(10));
