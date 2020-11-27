@@ -11,8 +11,8 @@ function PowerUsing(name, power, hour) {
 	Machine.call(this, name, power);
 	this.hour = hour;
 }
-PowerUsing.prototype = Object.create(Machine.prototype);
-PowerUsing.prototype.constructor = PowerUsing;
+PowerUsing.prototype = new Machine(); // здесь лучше использовать просто создание объекта с new, потому что иначе вы создаете ещё один лишний пустой объект в цепочке прототипов
+// PowerUsing.prototype.constructor = PowerUsing; -- свойство constructor является системным, переписывать его крайне нежелательно
 PowerUsing.prototype.calcPower = function(){
 	let result = this.hour * this.power;
   	console.log(`A ${this.power} ${this.name} used ${this.hour} hours per day is using totally ${result} watts`);
@@ -23,8 +23,9 @@ function CoffeeMachine(name, power, hour,capsule) {
 	PowerUsing.call(this, name, power, hour);
   this.capsule = capsule;
 }
-CoffeeMachine.prototype = Object.create(PowerUsing.prototype);
-CoffeeMachine.prototype.constructor = CoffeeMachine;
+CoffeeMachine.prototype = new PowerUsing();
+// CoffeeMachine.prototype.constructor = CoffeeMachine;
+// Здесь те же замечания, что и у PowerUsing
 CoffeeMachine.prototype.makeCoffee = function() {
  
  if (this.capsule == 0) {
@@ -38,8 +39,9 @@ function Iron(name, power, hour,wateramount) {
 	PowerUsing.call(this, name, power, hour);
   this.wateramount = wateramount;
 }
-Iron.prototype = Object.create(PowerUsing.prototype);
-Iron.prototype.constructor = Iron;
+Iron.prototype = new PowerUsing();
+// Iron.prototype.constructor = Iron;
+// То же самое, что и выше
 Iron.prototype.iron = function() {
  
  if (this.wateramount < 10) {

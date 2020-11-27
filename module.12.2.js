@@ -1,6 +1,6 @@
 function check(obj, str) {
 
-    return obj.hasOwnProperty(str);
+    return str in obj;
   
   }
   
@@ -17,3 +17,5 @@ function check(obj, str) {
   
   
   console.log(check(test, "foundYear"));
+
+// В данном задании не стояло условие проверить наличие именно собственного свойства, должно выводиться true, даже если свойство есть только в прототипе. Выше исправила
